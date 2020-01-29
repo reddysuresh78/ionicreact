@@ -4,7 +4,7 @@ import { Route, Redirect } from 'react-router';
 import { calendar, contacts, map } from 'ionicons/icons';
 import ListDemo from './ListDemo';
 import ListDemo2 from './ListDemo2';
-import CardDemo from './CardDemo';
+ 
 import RaasiChakra from './RaasiChakra';
 
 interface MainTabsProps { }

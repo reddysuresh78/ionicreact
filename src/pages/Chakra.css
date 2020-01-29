@@ -1,16 +1,13 @@
  
-   .cell6 {
-    border-top : 2px solid green !important;
+   #cell6, #cell10 {
+    border-top : 0px;
     border-bottom: 0px;
-    border-left: 0px;
-    border-right: 0px;
-     
-    
   }
 
-  #chakra-table td {
+ .chakra-table td {
     border : 2px solid black;
-    
+    min-width: 100px;
+    height: 100px;
     padding: 20px;
     text-align: center;
   }

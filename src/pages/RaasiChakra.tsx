@@ -1,42 +1,53 @@
 
-import React from 'react';
-import { star } from 'ionicons/icons';
-import { IonContent, IonText, IonPage } from '@ionic/react';
-import './RaasiChakra.css';
+import React, { useRef } from 'react';
+import {  Chakra } from './Chakra'
+import { camera, bookmark } from 'ionicons/icons';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonSegment, IonSegmentButton, IonIcon, IonSlides, IonSlide, IonText } from '@ionic/react';
 
+import   ListDemo   from './ListDemo';
+import ListDemo2 from './ListDemo';
+
+
+// class RaasiChakra extends Component<{},{}> {
 const RaasiChakra: React.FC = () => {
-  console.log('RaasiChakra called');
+
+  const slidesRef = useRef<HTMLIonSlidesElement>(null);
+
+  const slideTo = (indexStr: string) => {
+    let index = +indexStr
+    console.log('selected index ' , index);
+    slidesRef.current!.slideTo(index);
+  }
+
   return (
     <IonPage id="raasi-chakra-page">
-      <IonContent>
-        <table id="chakra-table">
-            <tr className="chakra-cell">
-              <td>first</td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td className="cell6"></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td className="cell6"></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+      <IonHeader>
+        <IonToolbar>
+          <IonSegment scrollable onIonChange={e => { console.log('Segment selected', e.detail.value); slideTo('' + e.detail.value); }}>
+            <IonSegmentButton value="1">
+              <IonIcon icon={camera} />
+            </IonSegmentButton>
+            <IonSegmentButton value="2">
+              <IonIcon icon={bookmark} />
+            </IonSegmentButton>
+          </IonSegment>
+        </IonToolbar>
+      </IonHeader>
 
-          </table>
-        <IonText>Some text</IonText>
+      <IonContent>
+        <IonSlides onIonSlideDidChange={e => console.log('Slide changed', e)} ref={slidesRef}>
+          <IonSlide class="slide-1">
+             <Chakra />  
+           
+          </IonSlide>
+          <IonSlide class="slide-2">
+             <ListDemo />  
+            <IonText>This is some text 2</IonText>
+          </IonSlide>
+          <IonSlide class="slide-3">
+            <ListDemo2 />
+          </IonSlide>
+        </IonSlides>
       </IonContent>
     </IonPage>
   );
