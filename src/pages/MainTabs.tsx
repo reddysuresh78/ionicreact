@@ -3,9 +3,8 @@ import { IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel } 
 import { Route, Redirect } from 'react-router';
 import { calendar, contacts, map } from 'ionicons/icons';
 import ListDemo from './ListDemo';
-import ListDemo2 from './ListDemo2';
  
-import RaasiChakra from './RaasiChakra';
+import RaasiChakra from './Home';
 
 interface MainTabsProps { }
 
@@ -21,9 +20,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         */}
                 <Route path="/tabs/schedule" render={() => <RaasiChakra />} exact={true} />
                 <Route path="/tabs/speakers" render={() => <ListDemo />} exact={true} />
-
-                <Route path="/tabs/map" render={() => <ListDemo2 />} exact={true} />
-
+ 
             </IonRouterOutlet>
             <IonTabBar slot="top">
                 <IonTabButton tab="schedule" href="/tabs/schedule">
