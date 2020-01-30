@@ -14,7 +14,7 @@ const Home: React.FC = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
     makePostRequest();
-  }, []);
+  }, []);   
 
   let makePostRequest = () => {
     axios.get<any>('https://jsonplaceholder.typicode.com/todos/1')

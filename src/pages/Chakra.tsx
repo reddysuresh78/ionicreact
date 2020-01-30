@@ -5,7 +5,7 @@ import { IonContent, IonText    } from '@ionic/react';
 import './Chakra.css';
 export const Chakra: React.FC = () => {
   console.log('Chakra called');
-  return (
+  return ( 
      
       <IonContent>
          <table className="chakra-table">

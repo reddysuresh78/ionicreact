@@ -8,7 +8,7 @@ const CardDemo: React.FC = () => {
   return (
     <IonPage>
       <IonContent>
-        <IonText>Some text</IonText>
+        <IonText>Some text</IonText> 
       </IonContent>
     </IonPage>
   );
