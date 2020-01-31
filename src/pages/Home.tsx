@@ -37,6 +37,9 @@ const Home: React.FC = () => {
   const clickSegment = async () => {
     let curIndex = await slidesRef.current!.getActiveIndex();
     segmentRef.current!.value = '' + curIndex;
+
+    var active = segmentRef.current!.querySelectorAll('ion-segment-button')[curIndex];
+    active.scrollIntoView({behavior: "smooth", inline:'center'});
   }
 
   const slideOpts = {
@@ -48,8 +51,8 @@ const Home: React.FC = () => {
   return (
     <IonPage id="raasi-chakra-page">
       <IonHeader>
-        <IonToolbar  className="scrollable-segments">
-          <IonSegment ref={segmentRef} onIonChange={e => slideTo('' + e.detail.value)   }>
+        <IonToolbar  >
+          <IonSegment scrollable ref={segmentRef} onIonChange={e => slideTo('' + e.detail.value)   }>
             <IonSegmentButton value="0" checked>
               <IonIcon icon={grid} />
               <IonLabel>Rasi Chakra</IonLabel>
@@ -86,24 +89,24 @@ const Home: React.FC = () => {
 
           </IonSlide>
           <IonSlide className="slide">
-            <ListDemo />
+             
             <IonText>DBA details will be shown here: Extracted Info {data}</IonText>
           </IonSlide>
           <IonSlide className="slide">
-            <ListDemo />
+          
             <IonText>info 1</IonText>
           </IonSlide>  
           <IonSlide className="slide">
-            <ListDemo />
+      
             <IonText>info 2</IonText>
           </IonSlide>  
           <IonSlide className="slide">
-            <ListDemo />
+          
             <IonText>info 3</IonText>
           </IonSlide>  
           <IonSlide className="slide">
             <ListDemo />
-            <IonText>info 4</IonText>
+            
           </IonSlide>  
             
 

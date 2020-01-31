@@ -4,12 +4,7 @@ import { IonList, IonItem, IonLabel, IonInput, IonToggle, IonRadio, IonCheckbox,
 
 const ListDemo: React.FC = () => { 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Ionic Demo App</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+   
      
       <IonContent>
     {/*-- List of Text Items --*/}
@@ -73,7 +68,7 @@ const ListDemo: React.FC = () => {
     </IonList>
          
       </IonContent>
-    </IonPage>
+    
   );
 };
 
