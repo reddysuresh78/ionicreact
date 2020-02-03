@@ -2,24 +2,35 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Chakra } from './Chakra'
 import { grid, search } from 'ionicons/icons';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonSegment, IonSegmentButton, IonIcon, IonSlides, IonSlide, IonText, IonLabel } from '@ionic/react';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonSegment, IonSegmentButton, IonIcon, IonSlides, IonSlide, IonText, IonLabel, IonItem } from '@ionic/react';
 
 import ListDemo from './ListDemo';
  
 import './Home.css';
 import axios  from 'axios';
 
+import { Plugins } from '@capacitor/core';
+
+
 // class RaasiChakra extends Component<{},{}> {
 const Home: React.FC = () => {
-  const [data, setData] = useState([]);
+  const [serverData, setServerData] = useState([]);
+  const [locData, setLocData] = useState({longitude: 0 , latitude: 0});
   useEffect(() => {
+    getLocation();
     makePostRequest();
   }, []);   
+
+  let getLocation = async () => {
+    const coordinates = await Plugins.Geolocation.getCurrentPosition();
+    setLocData ( { longitude: coordinates.coords.longitude, latitude: coordinates.coords.latitude  } );
+    console.log('Lang ' , coordinates.coords.longitude, coordinates.coords.latitude );
+  }
 
   let makePostRequest = () => {
     axios.get<any>('https://jsonplaceholder.typicode.com/todos/1')
       .then(response => {
-        setData(response.data.title);
+        setServerData(response.data.title);
         // console.log(response.data.title);
         // this.setState( { loadedPost: response.data } );
       });
@@ -90,11 +101,15 @@ const Home: React.FC = () => {
           </IonSlide>
           <IonSlide className="slide">
              
-            <IonText>DBA details will be shown here: Extracted Info {data}</IonText>
+            <IonText>DBA details will be shown here: Extracted Info {serverData}</IonText>
           </IonSlide>
           <IonSlide className="slide">
-          
-            <IonText>info 1</IonText>
+           <IonItem>
+            <IonText>Longitude: { locData.longitude} </IonText>
+            </IonItem>
+            <IonItem>
+            <IonText>  Latitude: { locData.latitude} </IonText>
+            </IonItem>
           </IonSlide>  
           <IonSlide className="slide">
       
