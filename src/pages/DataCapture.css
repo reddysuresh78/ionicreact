@@ -1,0 +1,14 @@
+.label-align {
+    text-align: right;
+    padding-right: 10px;
+    margin-top:10px;
+}
+
+.input-align{
+     margin-left: 5px;
+}
+
+.button-align{
+    margin-top:10px;
+    margin-left: 5px;
+}

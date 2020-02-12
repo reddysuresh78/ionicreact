@@ -24,14 +24,18 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import DataCapture from './pages/DataCapture';
+import Chakra from './pages/Chakra';
  
-
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter> 
       <IonRouterOutlet>
         {/* <Route path="/tabs" component={MainTabs} exact={true} /> */}
-        <Route path="/" component={Home} exact={true} />
+        <Route path="/" component={DataCapture} exact={true} />
+        {/* <Route   path="/dashboard" render={props =>   <Home    {...props} />  } /> */}
+
+        <Route exact path="/npl" render={(props) => <Home /> } />
  
         {/* <Route exact path="/" render={() => <Redirect to="/tabs" />} /> */}
       </IonRouterOutlet>

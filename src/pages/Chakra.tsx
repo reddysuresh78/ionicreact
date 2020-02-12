@@ -1,44 +1,66 @@
 
 import React from 'react';
 
-import { Plugins, FilesystemDirectory, Capacitor, FilesystemEncoding } from '@capacitor/core';
-import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { Plugins, FilesystemDirectory, Capacitor } from '@capacitor/core';
+ 
+
 import { IonContent, IonText, IonButton } from '@ionic/react';
 import './Chakra.css';
-export const Chakra: React.FC = () => {
 
-  let fileOpener: FileOpener;
+
+import pdfmake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
+const Chakra: React.FC = () => {
 
   let generatePDF = () => {
     console.log('Generate pdf called');
+ 
     const { Filesystem } = Plugins;
 
     if (Capacitor.isNative) {
+
       // Save the PDF to the device
-      const fileName = 'timesheet.txt';
+      const fileName = 'file.pdf';
       try {
-        Filesystem.writeFile({
-          path: fileName,
-          data: "This is sample text",
-          directory: FilesystemDirectory.Documents,
-          encoding: FilesystemEncoding.UTF8
-        }).then((writeFileResult) => {
-          Filesystem.getUri({
-            directory: FilesystemDirectory.Documents,
-            path: fileName
-          }).then((getUriResult) => {
-            const path = getUriResult.uri;
-            fileOpener.open(path, 'text/plain').then(() => console.log('File is opened'))
-              .catch(error => console.log('Error openening file', error));
-          }, (error) => {
-            console.log(error);
+
+        pdfmake.vfs = pdfFonts.pdfMake.vfs;
+        console.log('Create pdf called');
+        const doc = pdfmake.createPdf({ content: 'Hi. I am a PDF.' });
+        doc.getBase64((base64data) => {
+
+          Filesystem.writeFile({
+            path: fileName,
+            data: base64data,
+            directory: FilesystemDirectory.External
+            // encoding: FilesystemEncoding.UTF8
+          }).then((writeFileResult) => {
+            Filesystem.getUri({
+              directory: FilesystemDirectory.External,
+              path: fileName
+            }).then((getUriResult) => {
+              console.log("Cache " + FilesystemDirectory.External);
+              const path = getUriResult.uri;
+              console.log("File found @ " + path);
+
+              Plugins.CapFileOpener.open({ filePath: path.substr(7), fileMediaType: 'application/pdf' });
+   
+            }, (error) => {
+              console.error('Error while opening pdf', error);
+            });
           });
         });
-      } catch (error) {
+        } catch (error) {
         console.error('Unable to write file', error);
       }
+
     } else {
       console.log('Running in web');
+        // Save the PDF to the device
+        const fileName = 'file.pdf';
+        pdfmake.vfs = pdfFonts.pdfMake.vfs;
+         
+        pdfmake.createPdf({ content: 'Hi. I am a PDF.' }).open();
       // On a browser simply use download
       // this.pdfObj.download();
     }
@@ -87,3 +109,4 @@ export const Chakra: React.FC = () => {
 };
 
 
+export  default React.memo(Chakra);

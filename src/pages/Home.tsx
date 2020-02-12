@@ -1,8 +1,8 @@
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Chakra } from './Chakra'
-import { grid, search } from 'ionicons/icons';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonSegment, IonSegmentButton, IonIcon, IonSlides, IonSlide, IonText, IonLabel, IonItem } from '@ionic/react';
+import  Chakra   from './Chakra'
+import { grid,  document, thumbsUp, calendar } from 'ionicons/icons';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonIcon, IonSlides, IonSlide, IonText, IonLabel, IonItem } from '@ionic/react';
 
 import ListDemo from './ListDemo';
  
@@ -13,7 +13,7 @@ import { Plugins } from '@capacitor/core';
 
 
 // class RaasiChakra extends Component<{},{}> {
-const Home: React.FC = () => {
+const Home: React.FC = (props) => {
   const [serverData, setServerData] = useState([]);
   const [locData, setLocData] = useState({longitude: 0 , latitude: 0});
   useEffect(() => {
@@ -28,10 +28,11 @@ const Home: React.FC = () => {
   }
 
   let makePostRequest = () => {
-    axios.get<any>('https://jsonplaceholder.typicode.com/todos/1')
+    console.log('serverless is called');
+    axios.get<any>('https://6xdsi8hkl5.execute-api.us-east-1.amazonaws.com/dev/hello')
       .then(response => {
-        setServerData(response.data.title);
-        // console.log(response.data.title);
+        // console.log('Response', response.data);
+        setServerData(response.data.message);
         // this.setState( { loadedPost: response.data } );
       });
   }
@@ -62,33 +63,33 @@ const Home: React.FC = () => {
   return (
     <IonPage id="raasi-chakra-page">
       <IonHeader>
+       
+            <IonToolbar color="primary" >
+                <IonButtons slot="start">
+                    <IonBackButton defaultHref="/" />
+                </IonButtons>
+                <IonTitle class="ion-text-center">DR. RAJA'S NPL</IonTitle>
+            </IonToolbar>
+            
         <IonToolbar  >
           <IonSegment scrollable ref={segmentRef} onIonChange={e => slideTo('' + e.detail.value)   }>
             <IonSegmentButton value="0" checked>
               <IonIcon icon={grid} />
-              <IonLabel>Rasi Chakra</IonLabel>
+              <IonLabel>NPL Chakra</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value="1">
-              <IonIcon icon={search} />
-              <IonLabel>Dasa</IonLabel>
+              <IonIcon icon={document} />
+              <IonLabel>Observations</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value="2">
-              <IonIcon icon={search} />
-              <IonLabel>Panchang</IonLabel>
+              <IonIcon icon={thumbsUp} />
+              <IonLabel>NPL Rules</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value="3">
-              <IonIcon icon={search} />
-              <IonLabel>Birth Details</IonLabel>
+              <IonIcon icon={calendar} />
+              <IonLabel>NPL Today</IonLabel>
             </IonSegmentButton>
-            <IonSegmentButton value="4">
-              <IonIcon icon={search} />
-              <IonLabel>Transit</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value="5">
-              <IonIcon icon={search} />
-              <IonLabel>Shadbala</IonLabel>
-            </IonSegmentButton>
-
+          
           </IonSegment>
         </IonToolbar>
       </IonHeader>
@@ -101,7 +102,7 @@ const Home: React.FC = () => {
           </IonSlide>
           <IonSlide className="slide">
              
-            <IonText>DBA details will be shown here: Extracted Info {serverData}</IonText>
+            <IonText>Response from server: {serverData}</IonText>
           </IonSlide>
           <IonSlide className="slide">
            <IonItem>
@@ -111,14 +112,7 @@ const Home: React.FC = () => {
             <IonText>  Latitude: { locData.latitude} </IonText>
             </IonItem>
           </IonSlide>  
-          <IonSlide className="slide">
-      
-            <IonText>info 2</IonText>
-          </IonSlide>  
-          <IonSlide className="slide">
-          
-            <IonText>info 3</IonText>
-          </IonSlide>  
+       
           <IonSlide className="slide">
             <ListDemo />
             
