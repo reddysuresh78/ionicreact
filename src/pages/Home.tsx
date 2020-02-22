@@ -10,15 +10,16 @@ import './Home.css';
 import axios  from 'axios';
 
 import { Plugins } from '@capacitor/core';
+import { RouteComponentProps } from 'react-router';
 
 
 // class RaasiChakra extends Component<{},{}> {
-const Home: React.FC = (props) => {
+const Home: React.FC<RouteComponentProps<{}>> = (props:any) => {
   const [serverData, setServerData] = useState([]);
   const [locData, setLocData] = useState({longitude: 0 , latitude: 0});
   useEffect(() => {
     getLocation();
-    makePostRequest();
+    // makePostRequest();
   }, []);   
 
   let getLocation = async () => {
@@ -59,6 +60,7 @@ const Home: React.FC = (props) => {
     speed: 10
   };
   
+  console.log('Received Props ', props.location.state['nativeName']);
   
   return (
     <IonPage id="raasi-chakra-page">
@@ -97,7 +99,7 @@ const Home: React.FC = (props) => {
       <IonContent>
         <IonSlides onIonSlideDidChange={e => clickSegment() } ref={slidesRef} className="slides"  options={slideOpts}>
           <IonSlide className="slide1">
-            <Chakra />
+            <Chakra {...props}/>
 
           </IonSlide>
           <IonSlide className="slide">

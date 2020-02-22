@@ -1,7 +1,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
-import { grid, document, thumbsUp, calendar } from 'ionicons/icons';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButton, IonText, IonLabel, IonItem, IonGrid, IonRow, IonCol, IonDatetime, IonInput, IonTitle } from '@ionic/react';
+
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButton, IonLabel, IonGrid, IonRow, IonCol, IonDatetime, IonInput, IonTitle } from '@ionic/react';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { geocodeByPlaceId, getLatLng } from 'react-google-places-autocomplete';
 import { Capacitor } from '@capacitor/core';
@@ -10,19 +10,38 @@ import 'react-google-places-autocomplete/dist/assets/index.css';
 import './DataCapture.css';
 import axios from 'axios';
 
-import { Plugins, StatusBarStyle } from '@capacitor/core';
+import { Plugins } from '@capacitor/core';
 
 // class RaasiChakra extends Component<{},{}> {
-const Home: React.FC = (props: any) => {
-    const [serverData, setServerData] = useState([]);
+const DataCapture: React.FC = (props: any) => {
+    const [serverData, setServerData] = useState(null);
     const [locData, setLocData] = useState({ longitude: 0, latitude: 0, address: '' });
     const [selectedDate, setSelectedDate] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
     const { StatusBar } = Plugins;
+
     useEffect(() => {
         resetAll();
         // makePostRequest();
     }, []);
+    useEffect(() => {
+        if (serverData != null) {
+            // console.log('useeffect called with state ', serverData);
+            props.history.push({ pathname: '/npl', state: serverData });
+        }
+    }, [serverData]);
+    //https://6xdsi8hkl5.execute-api.us-east-1.amazonaws.com/dev/hello
+    let makePostRequest = async () => {
+        console.log('serverless is called');
+        await axios.get<any>('http://localhost:3000/')
+            .then(response => {
+                // console.log('Before setting data ', response.data.input.NPL);
+                setServerData(response.data.input.NPL);
+
+                // this.setState( { loadedPost: response.data } );
+                return;
+            });
+    }
 
     let resetAll = () => {
 
@@ -78,15 +97,6 @@ const Home: React.FC = (props: any) => {
         return address;
     }
 
-    let makePostRequest = () => {
-        console.log('serverless is called');
-        axios.get<any>('https://6xdsi8hkl5.execute-api.us-east-1.amazonaws.com/dev/hello')
-            .then(response => {
-                // console.log('Response', response.data);
-                setServerData(response.data.message);
-                // this.setState( { loadedPost: response.data } );
-            });
-    }
 
     let getLatLang = (val: any) => {
         console.log(val.place_id);
@@ -98,17 +108,18 @@ const Home: React.FC = (props: any) => {
 
     }
 
-    let getNPL = (e: any) => {
+    let getNPL = async (e: any) => {
         console.log('getNPL Called');
         e.preventDefault();
-        props.history.push({
-            pathname: '/npl',
-            // search: '?query=abc',
-            state: { detail: serverData }
-          })
+        await makePostRequest();
+        // console.log('Response frm getnpl ', serverData);
+        // let data = {
+        //     date: '12-05-2019',
+        //     time: '05:30',
+        //     place: 'Hyderabad'
+        // };
 
-        props.history.push('/npl');
-        
+
     }
 
     const slideOpts = {
@@ -121,9 +132,9 @@ const Home: React.FC = (props: any) => {
     const placeRef = useRef<HTMLIonInputElement>(null);
 
     const placeStyle = {
-       
-         marginLeft : 10
-      };
+
+        marginLeft: 10
+    };
     return (
         <IonPage id="raasi-chakra-page">
             <IonHeader>
@@ -134,7 +145,7 @@ const Home: React.FC = (props: any) => {
             </IonHeader>
             <IonContent>
                 <IonGrid>
-                    
+
 
                     <IonRow>
                         <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4" >
@@ -145,7 +156,7 @@ const Home: React.FC = (props: any) => {
                         </IonCol>
                     </IonRow>
                     <IonRow>
-                        <IonCol class="label-align"  sizeLg="6" sizeSm="4" sizeMd="4" size="4">
+                        <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4">
                             <IonLabel >Time</IonLabel>
                         </IonCol>
                         <IonCol>
@@ -153,7 +164,7 @@ const Home: React.FC = (props: any) => {
                         </IonCol>
                     </IonRow>
                     <IonRow>
-                        <IonCol class="label-align"  sizeLg="6" sizeSm="4" sizeMd="4" size="4">
+                        <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4">
                             <IonLabel  >Place</IonLabel>
                         </IonCol>
                         <IonCol >
@@ -161,18 +172,18 @@ const Home: React.FC = (props: any) => {
                         </IonCol>
                     </IonRow>
                     <IonRow>
-                        <IonCol class="label-align"  sizeLg="6" sizeSm="4" sizeMd="4" size="4">
+                        <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4">
                             <IonLabel >Select Place</IonLabel>
                         </IonCol>
                         <IonCol>
-                            
-                            <GooglePlacesAutocomplete  inputStyle={placeStyle}  onSelect={(val: any) => getLatLang(val)} />
-                            
+
+                            <GooglePlacesAutocomplete inputStyle={placeStyle} onSelect={(val: any) => getLatLang(val)} />
+
                         </IonCol>
                     </IonRow>
 
                     <IonRow>
-                        <IonCol class="label-align"  sizeLg="6" sizeSm="4" sizeMd="4" size="4">
+                        <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4">
                             <IonButton onClick={resetAll}>RESET</IonButton>
                         </IonCol>
                         <IonCol class="button-align">
@@ -187,4 +198,4 @@ const Home: React.FC = (props: any) => {
     );
 };
 
-export default React.memo(Home);
+export default React.memo(DataCapture);

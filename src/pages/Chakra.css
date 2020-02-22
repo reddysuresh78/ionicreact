@@ -12,6 +12,23 @@
     margin-top: 20px;
    }
 
+   .planet-table   {
+    width: 100%;
+    max-width: 500px; 
+    min-width: 300px;
+    margin: auto;
+    margin-top: 20px;
+   }
+
+   .npl-table   {
+    width: 100%;
+    max-width: 500px; 
+    min-width: 300px;
+    margin: auto;
+    margin-top: 20px;
+   }
+
+
 
  .chakra-table td {
     border : 2px solid black;
