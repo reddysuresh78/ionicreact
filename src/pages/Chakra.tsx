@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Plugins, FilesystemDirectory, Capacitor } from '@capacitor/core';
-import { IonContent, IonText, IonButton } from '@ionic/react';
+import { IonContent,  IonButton, IonLabel } from '@ionic/react';
 import './Chakra.css';
 import pdfmake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
  
 
 const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
+
+  const [chartDetails, setChartDetails] = useState("NPL CHART");
 
   const [chakraInfo, setChakraInfo] = useState({
     MESHAM: "", VRISHABHAM: "", MIDHUNAM: "", KARKATAKAM: "",
@@ -87,6 +89,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
   }
 
   useEffect(() => { 
+    populateChartInfo();
     populateChakraInfo(); 
     populatePlanetStarInfo(); 
     populateNPLInfo(); 
@@ -111,6 +114,11 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
     return ("" + d + '\xB0' + m + '\'' + s + '"');
   }
 
+  let populateChartInfo = () => {
+    let serverInfo = props.location.state;
+    let finalStr = 'NPL CHART \n\n' + serverInfo.birthDetails + "\n" + serverInfo.placeOfBirth.replace('(' , '\n').replace(',', '\n').replace(')','');
+    setChartDetails(finalStr);
+  }
   
   let populateNPLInfo = () => {
 
@@ -118,7 +126,22 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
     let serverInfo = props.location.state;
 
     console.log('DRM ', serverInfo.nplDetails.drm);
-    newNPLInfo = { ...newNPLInfo,  DRM : serverInfo.nplDetails.drm };
+    newNPLInfo = { ...newNPLInfo,  DRM : camelCase(serverInfo.nplDetails.drm) };
+    newNPLInfo = { ...newNPLInfo,  HRM : camelCase(serverInfo.nplDetails.hrm) + '(' + serverInfo.nplDetails.hrmPada + ')'};
+    newNPLInfo = { ...newNPLInfo,  HRM_LORD : camelCase(serverInfo.nplDetails.hrmLord) };
+    newNPLInfo = { ...newNPLInfo,  HRML_JEEVA : camelCase(serverInfo.nplDetails.hrmJeeva) };
+    newNPLInfo = { ...newNPLInfo,  HRML_SAREERA : camelCase(serverInfo.nplDetails.hrmSareera) };
+    newNPLInfo = { ...newNPLInfo,  NPL : camelCase(serverInfo.nplDetails.npl) };
+    
+    newNPLInfo = { ...newNPLInfo,  KALAMSA_LORD : camelCase(serverInfo.nplDetails.kalamsaLord) };
+    newNPLInfo = { ...newNPLInfo,  YK_PLANETS : camelCaseList(serverInfo.yogakarakas) };  //
+    newNPLInfo = { ...newNPLInfo,  PLANETS_IN_YK : camelCaseList(serverInfo.planetsInYKStar) }; //
+    newNPLInfo = { ...newNPLInfo,  DIGBALA_PLANETS : camelCaseList(serverInfo.digbalaPlanets) };//
+    newNPLInfo = { ...newNPLInfo,  UD_PLANETS : camelCaseList(serverInfo.udPlanets)  };  //
+    newNPLInfo = { ...newNPLInfo,  VUD_PLANETS : camelCaseList(serverInfo.vudPlanets)  };//
+    newNPLInfo = { ...newNPLInfo,  BHINNAPADA_PLANETS : camelCaseList(serverInfo.bpPlanets) };//
+    newNPLInfo = { ...newNPLInfo,  RAHU_REPS : camelCaseList(serverInfo.rahuRepresentations) }; //
+    newNPLInfo = { ...newNPLInfo,  KETU_REPS : camelCaseList(serverInfo.ketuRepresentations) };//
  
     setNPLInfo(newNPLInfo);
   }
@@ -132,7 +155,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
  
       if (item.planets) {
         item.planets.forEach( (planetItem :any ) => {
-          let starInfo = planetItem.planetStar + '(' + planetItem.pada + ')';
+          let starInfo = camelCase(  planetItem.planetStar ) + '(' + planetItem.pada + ')';
           let key = planetItem.planet;
           newPlanetStarInfo = { ...newPlanetStarInfo, [key]: starInfo };
         }, []);
@@ -141,6 +164,24 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
     });
     setPlanetStarInfo(newPlanetStarInfo);
   }
+
+  let camelCaseList = (planets: string[]) => {
+    let retValue = planets.reduce( (finalStr, planet ) => { 
+      return finalStr + " " + camelCaseShortPlanet(planet); 
+    }, "" );
+
+    return retValue;
+} ;
+
+  
+
+  let camelCase = (planet: string) => {
+      return planet.substr(0,1) + planet.substr (1).toLowerCase();
+  } ;
+
+  let camelCaseShortPlanet = (planet: string) => {
+    return planet.substr(0,1) + planet.substr (1,1).toLowerCase();
+} ;
 
   let populateChakraInfo = () => {
 
@@ -153,7 +194,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
       if (item.planets) {
         let planetsArray = item.planets.reduce((initialValue: string[], planetItem: any) => {
           // console.log('Current planet: ', planetItem.planet);
-          initialValue.push(planetItem.planet.substr(0, 2) + ' ' + deg_to_dms(planetItem.longitude));
+          initialValue.push(camelCaseShortPlanet(planetItem.planet) + ' ' + deg_to_dms(planetItem.longitude));
           //planetItem.planetStar + '(' + planetItem.pada + ')'
           return initialValue;
         }, []);
@@ -185,7 +226,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
           </tr>
           <tr>
             <td>{chakraInfo.KUMBHAM}</td>
-            <td id="cell6" colSpan={2}>  <IonText>Some text</IonText></td>
+  <td id="cell6" colSpan={2}>  <IonLabel class="main_label"> { chartDetails}</IonLabel></td>
             <td>{chakraInfo.KARKATAKAM}</td>
 
           </tr>
@@ -207,39 +248,39 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
       <table className="planet-table">
         <tbody>
         <tr>
-            <td>LAGNA</td>
+            <td>La</td>
             <td>{planetStarInfo.LAGNA}</td>
-            <td>SUN</td>
+            <td>Su</td>
             <td>{planetStarInfo.SUN}</td>
           </tr>
           
           <tr>
-            <td>MOON</td>
+            <td>Mo</td>
             <td>{planetStarInfo.MOON}</td>
-            <td>MARS</td>
+            <td>Ma</td>
             <td>{planetStarInfo.MARS}</td>
           </tr>
           <tr>
             
           </tr>
           <tr>
-            <td>MERCURY</td>
+            <td>Me</td>
             <td>{planetStarInfo.MERCURY}</td>
-            <td>JUPITER</td>
+            <td>Ju</td>
             <td>{planetStarInfo.JUPITER}</td>
           </tr>
           
           <tr>
-            <td>VENUS</td>
+            <td>Ve</td>
             <td>{planetStarInfo.VENUS}</td>
-            <td>SATURN</td>
+            <td>Sa</td>
             <td>{planetStarInfo.SATURN}</td>
           </tr>
          
           <tr>
-            <td>RAHU</td>
+            <td>Ra</td>
             <td>{planetStarInfo.RAHU}</td>
-            <td>KETU</td>
+            <td>Ke</td>
             <td>{planetStarInfo.KETU}</td>
           </tr>
  
@@ -256,54 +297,49 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
           </tr>
           
           <tr>
-            <td>HRM_LORD</td>
+            <td>HRM Lord</td>
             <td>{nplInfo.HRM_LORD}</td>
-            <td>HRML_JEEVA</td>
+            <td>HRML Jeeva</td>
             <td>{nplInfo.HRML_JEEVA}</td>
           </tr>
+          
           <tr>
-            
-          </tr>
-          <tr>
-            <td>HRML_SAREERA</td>
+            <td>HRML Sareera</td>
             <td>{nplInfo.HRML_SAREERA}</td>
-            <td>KALAMSA_LORD</td>
+            <td>KALAMSA Lord</td>
             <td>{nplInfo.KALAMSA_LORD}</td>
           </tr>
           
           <tr>
-            <td>NPL</td>
-            <td>{nplInfo.NPL}</td>
-            <td>YK_PLANETS</td>
+             
+            <td>YK Planets</td>
             <td>{nplInfo.YK_PLANETS}</td>
+            <td>Planets in YK *</td>
+            <td>{nplInfo.PLANETS_IN_YK}</td>
           </tr>
          
           <tr>
-            <td>PLANETS_IN_YK</td>
-            <td>{nplInfo.PLANETS_IN_YK}</td>
-            <td>DIGBALA_PLANETS</td>
+            
+            <td>Digbala Planets</td>
             <td>{nplInfo.DIGBALA_PLANETS}</td>
+            <td>Binnapada Planets</td>
+            <td>{nplInfo.BHINNAPADA_PLANETS}</td>
           </tr>
 
           <tr>
-            <td>UD_PLANETS</td>
+            <td>UD Planets</td>
             <td>{nplInfo.UD_PLANETS}</td>
-            <td>VUD_PLANETS</td>
+            <td>VUD Planets</td>
             <td>{nplInfo.VUD_PLANETS}</td>
           </tr>
-
+      
           <tr>
-            <td>BHINNAPADA_PLANETS</td>
-            <td>{nplInfo.BHINNAPADA_PLANETS}</td>
-            <td>RAHU_REPS</td>
+            <td>Rahu Reps</td>
             <td>{nplInfo.RAHU_REPS}</td>
-          </tr>
-
-          <tr>
-            <td>KETU_REPS</td>
+             
+            <td>Ketu Reps</td>
             <td>{nplInfo.KETU_REPS}</td>
-            <td>KETU_REPS</td>
-            <td>{nplInfo.KETU_REPS}</td>
+         
           </tr>
  
  

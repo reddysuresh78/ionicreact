@@ -28,7 +28,9 @@
     margin-top: 20px;
    }
 
-
+.main_label {
+  white-space: pre-wrap
+}
 
  .chakra-table td {
     border : 2px solid black;
