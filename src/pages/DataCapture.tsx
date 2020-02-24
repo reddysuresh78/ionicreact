@@ -14,10 +14,14 @@ import { Plugins } from '@capacitor/core';
 
 // class RaasiChakra extends Component<{},{}> {
 const DataCapture: React.FC = (props: any) => {
+
+    const npl_url = 'https://6xdsi8hkl5.execute-api.us-east-1.amazonaws.com/dev/hello';
+    //'http://localhost:3000/'; //
     const [serverData, setServerData] = useState(null);
     const [locData, setLocData] = useState({ longitude: 0, latitude: 0, address: '' });
     const [selectedDate, setSelectedDate] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
+
     const { StatusBar } = Plugins;
 
     useEffect(() => {
@@ -30,10 +34,30 @@ const DataCapture: React.FC = (props: any) => {
             props.history.push({ pathname: '/npl', state: serverData });
         }
     }, [serverData]);
-    //https://6xdsi8hkl5.execute-api.us-east-1.amazonaws.com/dev/hello
+
     let makePostRequest = async () => {
-        console.log('serverless is called');
-        await axios.get<any>('http://localhost:3000/')
+        setSelectedTime(timeRef.current!.value + '');
+        setSelectedDate(dateRef.current!.value + '');
+
+        let finalDate = dateRef.current!.value;
+
+        if(finalDate?.length === 10) {
+
+        }
+        
+        let requestParams = {
+
+            longitude: locData.longitude, 
+            latitude: locData.latitude, 
+            address: locData.address,
+            date: dateRef.current!.value,
+            time: timeRef.current!.value
+        }
+        console.log('serverless is called with data ' , requestParams);
+        await axios.post<any>(npl_url, {
+            params: requestParams },
+            {timeout: 5000}
+         )
             .then(response => {
                 // console.log('Before setting data ', response.data.input.NPL);
                 setServerData(response.data.input.NPL);
@@ -48,13 +72,13 @@ const DataCapture: React.FC = (props: any) => {
         const isStatusBarAvailable = Capacitor.isPluginAvailable('StatusBar');
         if (isStatusBarAvailable) {
             console.log('setting status bar color');
-            StatusBar.setBackgroundColor({ color: '#ffffff' });
+            StatusBar.setBackgroundColor({ color: '#3171e0' });
         }
 
         // StatusBar.setBackgroundColor( {color: "primary" } );
         var today = new Date();
-        var date = (today.getMonth() + 1) + '-' + today.getDate() + "-" + today.getFullYear();
-        var time = today.getHours() + ":" + (today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes());
+        var date = today.getFullYear()  + "-" +  adjustDigits(today.getMonth() + 1) + '-' + adjustDigits(today.getDate()); 
+        var time = adjustDigits(today.getHours() ) + ":" + adjustDigits(today.getMinutes() );
         console.log('Date has been set to ', date, time);
         setSelectedTime(time);
         setSelectedDate(date);
@@ -62,12 +86,21 @@ const DataCapture: React.FC = (props: any) => {
         timeRef.current!.value = time;
         getLocation();
     }
+
+    let adjustDigits= (val:number) => {
+        if(val<10) 
+            return '0' + val;
+
+        return val;
+
+    }
     let getLocation = async () => {
         const coordinates = await Plugins.Geolocation.getCurrentPosition();
 
         var address = await getPlaceAddress(coordinates.coords.latitude, coordinates.coords.longitude)
         console.log('Lang ', coordinates.coords.longitude, coordinates.coords.latitude, address);
         setLocData({ longitude: coordinates.coords.longitude, latitude: coordinates.coords.latitude, address: address });
+
     }
     let getPlaceAddress = async (latitude: number, longitude: number) => {
         console.log('place api is called');
@@ -99,11 +132,13 @@ const DataCapture: React.FC = (props: any) => {
 
 
     let getLatLang = (val: any) => {
-        console.log(val.place_id);
+        console.log('selected value: ', val);
         geocodeByPlaceId(val.place_id)
             .then((results: any) => getLatLng(results[0]))
-            .then((latlng: any) =>
-                console.log('Successfully got latitude and longitude', latlng.lat, latlng.lng)
+            .then((latlng: any) => {
+                setLocData({ longitude: latlng.lng, latitude: latlng.lat, address: val.description });
+                console.log('Successfully got latitude and longitude', latlng.lat, latlng.lng, val.description);
+            }
             );
 
     }
@@ -129,8 +164,7 @@ const DataCapture: React.FC = (props: any) => {
 
     const dateRef = useRef<HTMLIonDatetimeElement>(null);
     const timeRef = useRef<HTMLIonDatetimeElement>(null);
-    const placeRef = useRef<HTMLIonInputElement>(null);
-
+  
     const placeStyle = {
 
         marginLeft: 10
@@ -163,21 +197,14 @@ const DataCapture: React.FC = (props: any) => {
                             <IonDatetime placeholder="Time" ref={timeRef} value={selectedTime} displayFormat="h:mm A" pickerFormat="h:mm A" >Time</IonDatetime>
                         </IonCol>
                     </IonRow>
+                  
                     <IonRow>
                         <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4">
-                            <IonLabel  >Place</IonLabel>
-                        </IonCol>
-                        <IonCol >
-                            <IonInput class="input-align" ref={placeRef} value={locData.address} />
-                        </IonCol>
-                    </IonRow>
-                    <IonRow>
-                        <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4">
-                            <IonLabel >Select Place</IonLabel>
+                            <IonLabel >Place</IonLabel>
                         </IonCol>
                         <IonCol>
 
-                            <GooglePlacesAutocomplete inputStyle={placeStyle} onSelect={(val: any) => getLatLang(val)} />
+                            <GooglePlacesAutocomplete initialValue={locData.address} inputStyle={placeStyle} onSelect={(val: any) => getLatLang(val)} />
 
                         </IonCol>
                     </IonRow>

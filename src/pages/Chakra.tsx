@@ -116,6 +116,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
 
   let populateChartInfo = () => {
     let serverInfo = props.location.state;
+    console.log('Response from server: ', serverInfo.nplDetails);
     let finalStr = 'NPL CHART \n\n' + serverInfo.birthDetails + "\n" + serverInfo.placeOfBirth.replace('(' , '\n').replace(',', '\n').replace(')','');
     setChartDetails(finalStr);
   }
