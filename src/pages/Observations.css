@@ -29,7 +29,7 @@
     min-width: 300px;
     margin: auto;
     margin-top: 20px;
-    font-size: small;
+    font-size: medium;
     text-align: left;
    }
 
@@ -37,17 +37,14 @@
   white-space: pre-wrap
 }
 
-.btn{
-  margin-top: 20px;;
-}
-
- .chakra-table td {
-    border : 2px solid black;
-    min-width: 60px;
-    width: 25%;
-    height: 100px;
-    padding: 20px;
-    text-align: center;
+ .npl-table  td {
+    border : 1px solid gray;
+    min-width: 30px;
+ 
+ 
+    padding: 5px;
+    text-align: left;
+    justify-content: flex-end;
   }
  
   .ios .about-info {

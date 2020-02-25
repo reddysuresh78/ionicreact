@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import  Chakra   from './Chakra'
+import  Observations   from './Observations'
 import { grid,  document, thumbsUp, calendar } from 'ionicons/icons';
 import { IonContent, IonPage, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonIcon, IonSlides, IonSlide, IonText, IonLabel, IonItem } from '@ionic/react';
 
@@ -15,7 +16,7 @@ import { RouteComponentProps } from 'react-router';
 
 // class RaasiChakra extends Component<{},{}> {
 const Home: React.FC<RouteComponentProps<{}>> = (props:any) => {
-  const [serverData, setServerData] = useState([]);
+ 
   const [locData, setLocData] = useState({longitude: 0 , latitude: 0});
   useEffect(() => {
     getLocation();
@@ -27,17 +28,7 @@ const Home: React.FC<RouteComponentProps<{}>> = (props:any) => {
     setLocData ( { longitude: coordinates.coords.longitude, latitude: coordinates.coords.latitude  } );
     console.log('Lang ' , coordinates.coords.longitude, coordinates.coords.latitude );
   }
-
-  let makePostRequest = () => {
-    console.log('serverless is called');
-    axios.get<any>('https://6xdsi8hkl5.execute-api.us-east-1.amazonaws.com/dev/hello')
-      .then(response => {
-        // console.log('Response', response.data);
-        setServerData(response.data.message);
-        // this.setState( { loadedPost: response.data } );
-      });
-  }
-
+  
   const slidesRef = useRef<HTMLIonSlidesElement>(null);
   const segmentRef = useRef<HTMLIonSegmentElement>(null);
 
@@ -104,7 +95,7 @@ const Home: React.FC<RouteComponentProps<{}>> = (props:any) => {
           </IonSlide>
           <IonSlide className="slide">
              
-            <IonText>Response from server: {serverData}</IonText>
+             <Observations  {...props}/>
           </IonSlide>
           <IonSlide className="slide">
            <IonItem>

@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
 
   const [chartDetails, setChartDetails] = useState("NPL CHART");
+ 
 
   const [chakraInfo, setChakraInfo] = useState({
     MESHAM: "", VRISHABHAM: "", MIDHUNAM: "", KARKATAKAM: "",
@@ -90,6 +91,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
 
   useEffect(() => { 
     populateChartInfo();
+   
     populateChakraInfo(); 
     populatePlanetStarInfo(); 
     populateNPLInfo(); 
@@ -120,12 +122,13 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
     let finalStr = 'NPL CHART \n\n' + serverInfo.birthDetails + "\n" + serverInfo.placeOfBirth.replace('(' , '\n').replace(',', '\n').replace(')','');
     setChartDetails(finalStr);
   }
-  
+   
+
   let populateNPLInfo = () => {
 
     let newNPLInfo = { ...nplInfo };
     let serverInfo = props.location.state;
-
+  
     console.log('DRM ', serverInfo.nplDetails.drm);
     newNPLInfo = { ...newNPLInfo,  DRM : camelCase(serverInfo.nplDetails.drm) };
     newNPLInfo = { ...newNPLInfo,  HRM : camelCase(serverInfo.nplDetails.hrm) + '(' + serverInfo.nplDetails.hrmPada + ')'};
@@ -133,7 +136,6 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
     newNPLInfo = { ...newNPLInfo,  HRML_JEEVA : camelCase(serverInfo.nplDetails.hrmJeeva) };
     newNPLInfo = { ...newNPLInfo,  HRML_SAREERA : camelCase(serverInfo.nplDetails.hrmSareera) };
     newNPLInfo = { ...newNPLInfo,  NPL : camelCase(serverInfo.nplDetails.npl) };
-    
     newNPLInfo = { ...newNPLInfo,  KALAMSA_LORD : camelCase(serverInfo.nplDetails.kalamsaLord) };
     newNPLInfo = { ...newNPLInfo,  YK_PLANETS : camelCaseList(serverInfo.yogakarakas) };  //
     newNPLInfo = { ...newNPLInfo,  PLANETS_IN_YK : camelCaseList(serverInfo.planetsInYKStar) }; //
@@ -188,18 +190,28 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
 
     let newChakraInfo = { ...chakraInfo };
     let orderedHouses = props.location.state.raasiChakra.orderedHouses;
-
+   
     orderedHouses.forEach((item: any, index: number) => {
 
       let planetsInHouse = "";
       if (item.planets) {
         let planetsArray = item.planets.reduce((initialValue: string[], planetItem: any) => {
           // console.log('Current planet: ', planetItem.planet);
-          initialValue.push(camelCaseShortPlanet(planetItem.planet) + ' ' + deg_to_dms(planetItem.longitude));
+          let curPlanet = planetItem.planet;
+          if(curPlanet === 'LAGNA'){
+              curPlanet = 'NPL';
+          }else{
+              curPlanet = camelCaseShortPlanet(curPlanet) 
+          }
+          initialValue.push(curPlanet  + ' ' + deg_to_dms(planetItem.longitude));
+          
           //planetItem.planetStar + '(' + planetItem.pada + ')'
           return initialValue;
         }, []);
         planetsInHouse = planetsArray.join('\n');
+        if(planetsInHouse.indexOf("Mo") >=0) {
+          planetsInHouse = planetsInHouse + '\nDRM';
+        }
 
       }
       let key = item.raasi;
@@ -207,6 +219,11 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
 
       // console.log(item.raasi + ': ' , planetsInHouse);
     });
+    let serverInfo = props.location.state;
+    let key = serverInfo.nplDetails.hrmSign;
+    let hrmPlanetList = newChakraInfo.KANYA;
+    hrmPlanetList = hrmPlanetList + '\nHRM';
+    newChakraInfo = { ...newChakraInfo, [key]: hrmPlanetList };
 
     setChakraInfo(newChakraInfo);
 
@@ -227,7 +244,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
           </tr>
           <tr>
             <td>{chakraInfo.KUMBHAM}</td>
-  <td id="cell6" colSpan={2}>  <IonLabel class="main_label"> { chartDetails}</IonLabel></td>
+            <td id="cell6" colSpan={2}>  <IonLabel class="main_label"> { chartDetails}</IonLabel></td>
             <td>{chakraInfo.KARKATAKAM}</td>
 
           </tr>
@@ -249,106 +266,53 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
       <table className="planet-table">
         <tbody>
         <tr>
-            <td>La</td>
+            <td>NPL</td>
             <td>{planetStarInfo.LAGNA}</td>
-            <td>Su</td>
-            <td>{planetStarInfo.SUN}</td>
+            <td>DRM</td>
+            <td>{nplInfo.DRM}</td>
+            <td>HRM</td>
+            <td>{nplInfo.HRM}</td>
+           
           </tr>
           
           <tr>
+            <td>Su</td>
+            <td>{planetStarInfo.SUN}</td>
             <td>Mo</td>
             <td>{planetStarInfo.MOON}</td>
             <td>Ma</td>
             <td>{planetStarInfo.MARS}</td>
-          </tr>
-          <tr>
             
           </tr>
+        
+          
           <tr>
             <td>Me</td>
             <td>{planetStarInfo.MERCURY}</td>
             <td>Ju</td>
             <td>{planetStarInfo.JUPITER}</td>
-          </tr>
-          
-          <tr>
             <td>Ve</td>
             <td>{planetStarInfo.VENUS}</td>
-            <td>Sa</td>
-            <td>{planetStarInfo.SATURN}</td>
+            
           </tr>
          
           <tr>
+            <td>Sa</td>
+            <td>{planetStarInfo.SATURN}</td>
             <td>Ra</td>
             <td>{planetStarInfo.RAHU}</td>
             <td>Ke</td>
             <td>{planetStarInfo.KETU}</td>
+           
           </tr>
  
         </tbody>
       </table>
 
-      <table className="npl-table">
-        <tbody>
-        <tr>
-            <td>DRM</td>
-            <td>{nplInfo.DRM}</td>
-            <td>HRM</td>
-            <td>{nplInfo.HRM}</td>
-          </tr>
-          
-          <tr>
-            <td>HRM Lord</td>
-            <td>{nplInfo.HRM_LORD}</td>
-            <td>HRML Jeeva</td>
-            <td>{nplInfo.HRML_JEEVA}</td>
-          </tr>
-          
-          <tr>
-            <td>HRML Sareera</td>
-            <td>{nplInfo.HRML_SAREERA}</td>
-            <td>KALAMSA Lord</td>
-            <td>{nplInfo.KALAMSA_LORD}</td>
-          </tr>
-          
-          <tr>
-             
-            <td>YK Planets</td>
-            <td>{nplInfo.YK_PLANETS}</td>
-            <td>Planets in YK *</td>
-            <td>{nplInfo.PLANETS_IN_YK}</td>
-          </tr>
-         
-          <tr>
-            
-            <td>Digbala Planets</td>
-            <td>{nplInfo.DIGBALA_PLANETS}</td>
-            <td>Binnapada Planets</td>
-            <td>{nplInfo.BHINNAPADA_PLANETS}</td>
-          </tr>
-
-          <tr>
-            <td>UD Planets</td>
-            <td>{nplInfo.UD_PLANETS}</td>
-            <td>VUD Planets</td>
-            <td>{nplInfo.VUD_PLANETS}</td>
-          </tr>
-      
-          <tr>
-            <td>Rahu Reps</td>
-            <td>{nplInfo.RAHU_REPS}</td>
-             
-            <td>Ketu Reps</td>
-            <td>{nplInfo.KETU_REPS}</td>
-         
-          </tr>
- 
- 
-        </tbody>
-      </table>
+       
 
       <div>
-        <IonButton onClick={generatePDF}>Export PDF</IonButton>
+        <IonButton onClick={generatePDF} class="btn">Export PDF</IonButton>
 
       </div>
     </IonContent>
