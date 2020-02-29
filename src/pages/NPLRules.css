@@ -2,8 +2,6 @@
     text-align: right;
     padding-right: 10px;
     margin-top:10px;
-    font-weight: bold;
-    font-size: medium;
 }
 
 .input-align{
@@ -12,16 +10,9 @@
 
 .day-button-align{
     text-align: center;
-    /* margin-left: 120px; */
-    /* padding-left: 20px; */
-    margin: auto;
+    margin-left: 120px;
+    padding-left: 20px;
    
-}
-
-.data-card{
-    
-    width: 95%;
-    margin: auto;
 }
 
 .button-align{
@@ -33,11 +24,15 @@
   
         width: 100px;
         height: 100px;
-        color: #3880ff;
+        color: blue;
         display: block;
         margin: auto;
      
      
    
 }
- 
+
+.npl-rules{
+    margin-top: 10px !important;
+    padding-top: 10px;
+}

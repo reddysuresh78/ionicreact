@@ -1,7 +1,10 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButton, IonLabel, IonGrid, IonRow, IonCol, IonDatetime, IonInput, IonTitle } from '@ionic/react';
+import {
+    IonContent, IonPage, IonCardHeader, IonCardSubtitle, IonCardTitle,
+    IonCard, IonCardContent, IonToast, IonHeader, IonToolbar, IonButton, IonLabel, IonGrid, IonRow, IonCol, IonDatetime, IonInput, IonTitle, IonSpinner
+} from '@ionic/react';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { geocodeByPlaceId, getLatLng } from 'react-google-places-autocomplete';
 import { Capacitor } from '@capacitor/core';
@@ -9,7 +12,6 @@ import { Capacitor } from '@capacitor/core';
 import 'react-google-places-autocomplete/dist/assets/index.css';
 import './DataCapture.css';
 import axios from 'axios';
-
 import { Plugins } from '@capacitor/core';
 
 // class RaasiChakra extends Component<{},{}> {
@@ -17,7 +19,10 @@ const DataCapture: React.FC = (props: any) => {
 
     const npl_url = 'https://6xdsi8hkl5.execute-api.us-east-1.amazonaws.com/dev/hello';
     //'http://localhost:3000/'; //
+    const [showToast, setShowToast] = useState(false);
     const [serverData, setServerData] = useState(null);
+    const [hideSpinner, setHideSpinner] = useState(true);
+
     const [locData, setLocData] = useState({ longitude: 0, latitude: 0, address: '' });
     const [selectedDate, setSelectedDate] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
@@ -36,32 +41,39 @@ const DataCapture: React.FC = (props: any) => {
     }, [serverData]);
 
     let makePostRequest = async () => {
+        if (locData.address.trim() === '') {
+            setShowToast(true);
+            return;
+        }
+
+        setHideSpinner(false);
         setSelectedTime(timeRef.current!.value + '');
         setSelectedDate(dateRef.current!.value + '');
 
         let finalDate = dateRef.current!.value;
 
-        if(finalDate?.length === 10) {
+        if (finalDate?.length === 10) {
 
         }
-        
+
         let requestParams = {
 
-            longitude: locData.longitude, 
-            latitude: locData.latitude, 
+            longitude: locData.longitude,
+            latitude: locData.latitude,
             address: locData.address,
             date: dateRef.current!.value,
             time: timeRef.current!.value
         }
-        console.log('serverless is called with data ' , requestParams);
+        console.log('serverless is called with data ', requestParams);
         await axios.post<any>(npl_url, {
-            params: requestParams },
-            {timeout: 5000}
-         )
+            params: requestParams
+        },
+            { timeout: 5000 }
+        )
             .then(response => {
-                // console.log('Before setting data ', response.data.input.NPL);
+                console.log('Before setting data ', response.data.input.NPL);
                 setServerData(response.data.input.NPL);
-
+                setHideSpinner(true);
                 // this.setState( { loadedPost: response.data } );
                 return;
             });
@@ -77,8 +89,8 @@ const DataCapture: React.FC = (props: any) => {
 
         // StatusBar.setBackgroundColor( {color: "primary" } );
         var today = new Date();
-        var date = today.getFullYear()  + "-" +  adjustDigits(today.getMonth() + 1) + '-' + adjustDigits(today.getDate()); 
-        var time = adjustDigits(today.getHours() ) + ":" + adjustDigits(today.getMinutes() );
+        var date = today.getFullYear() + "-" + adjustDigits(today.getMonth() + 1) + '-' + adjustDigits(today.getDate());
+        var time = adjustDigits(today.getHours()) + ":" + adjustDigits(today.getMinutes());
         console.log('Date has been set to ', date, time);
         setSelectedTime(time);
         setSelectedDate(date);
@@ -87,8 +99,8 @@ const DataCapture: React.FC = (props: any) => {
         getLocation();
     }
 
-    let adjustDigits= (val:number) => {
-        if(val<10) 
+    let adjustDigits = (val: number) => {
+        if (val < 10)
             return '0' + val;
 
         return val;
@@ -164,7 +176,7 @@ const DataCapture: React.FC = (props: any) => {
 
     const dateRef = useRef<HTMLIonDatetimeElement>(null);
     const timeRef = useRef<HTMLIonDatetimeElement>(null);
-  
+
     const placeStyle = {
 
         marginLeft: 10
@@ -178,47 +190,67 @@ const DataCapture: React.FC = (props: any) => {
                 </IonToolbar>
             </IonHeader>
             <IonContent>
-                <IonGrid>
+                <IonToast
+                    isOpen={showToast}
+                    color="danger"
+                    onDidDismiss={() => setShowToast(false)}
+                    message="Please enter place"
+                    duration={1000}
+                />
+                <IonCard class="data-card">
+                    
+                    <IonCardContent>
+                        <IonGrid>
+  
+                            <IonRow>
+                                <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4" >
+                                    <IonLabel>Date</IonLabel>
+                                </IonCol>
+                                <IonCol>
+                                    <IonDatetime placeholder="Date" ref={dateRef} value={selectedDate}>Date</IonDatetime>
+                                </IonCol>
+                            </IonRow>
+                            <IonRow>
+                                <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4">
+                                    <IonLabel >Time</IonLabel>
+                                </IonCol>
+                                <IonCol>
+                                    <IonDatetime placeholder="Time" ref={timeRef} value={selectedTime} displayFormat="h:mm A" pickerFormat="h:mm A" >Time</IonDatetime>
+                                </IonCol>
+                            </IonRow>
 
+                            <IonRow>
+                                <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4">
+                                    <IonLabel >Place</IonLabel>
+                                </IonCol>
+                                <IonCol>
 
-                    <IonRow>
-                        <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4" >
-                            <IonLabel>Date</IonLabel>
-                        </IonCol>
-                        <IonCol>
-                            <IonDatetime placeholder="Date" ref={dateRef} value={selectedDate}>Date</IonDatetime>
-                        </IonCol>
-                    </IonRow>
-                    <IonRow>
-                        <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4">
-                            <IonLabel >Time</IonLabel>
-                        </IonCol>
-                        <IonCol>
-                            <IonDatetime placeholder="Time" ref={timeRef} value={selectedTime} displayFormat="h:mm A" pickerFormat="h:mm A" >Time</IonDatetime>
-                        </IonCol>
-                    </IonRow>
-                  
-                    <IonRow>
-                        <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4">
-                            <IonLabel >Place</IonLabel>
-                        </IonCol>
-                        <IonCol>
+                                    <GooglePlacesAutocomplete initialValue={locData.address} inputStyle={placeStyle} onSelect={(val: any) => getLatLang(val)} />
 
-                            <GooglePlacesAutocomplete initialValue={locData.address} inputStyle={placeStyle} onSelect={(val: any) => getLatLang(val)} />
+                                </IonCol>
+                            </IonRow>
 
-                        </IonCol>
-                    </IonRow>
+                            <IonRow>
+                                <IonCol class="label-align" sizeLg="6" sizeSm="6" sizeMd="6" size="6">
+                                    <IonButton onClick={resetAll}>RESET</IonButton>
+                                </IonCol>
+                                <IonCol class="button-align">
+                                    <IonButton onClick={getNPL}>GET NPL</IonButton>
+                                </IonCol>
+                            </IonRow>
+                            <IonRow>
 
-                    <IonRow>
-                        <IonCol class="label-align" sizeLg="6" sizeSm="4" sizeMd="4" size="4">
-                            <IonButton onClick={resetAll}>RESET</IonButton>
-                        </IonCol>
-                        <IonCol class="button-align">
-                            <IonButton onClick={getNPL}>Generate NPL</IonButton>
-                        </IonCol>
-                    </IonRow>
+                                <IonCol class="day-button-align" offsetLg="3" sizeLg="6" sizeSm="5" sizeMd="5" size="6">
+                                    <IonButton onClick={getNPL}>GET NPL For Day</IonButton>
+                                </IonCol>
+                            </IonRow>
 
-                </IonGrid>
+                        </IonGrid>
+                    </IonCardContent>
+                </IonCard>
+                <IonSpinner className="custom-spinner" hidden={hideSpinner}>
+
+                </IonSpinner>
 
             </IonContent>
         </IonPage>

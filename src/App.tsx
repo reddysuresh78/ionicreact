@@ -25,16 +25,38 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import DataCapture from './pages/DataCapture';
+ 
+import { Plugins } from '@capacitor/core'
 
-const App: React.FC = (props:any) => (
+const { SplashScreen } = Plugins;
+SplashScreen.hide();
+
+Plugins.App.addListener('backButton', (data: any) => {
+  console.log('back called with ', window.location.pathname);
+  console.log('back called with ', JSON.stringify(  data));
+  if (window.location.pathname === "/") {
+    Plugins.App.exitApp();
+  } else {
+    console.log('History: ', JSON.stringify(  window.history));
+    window.history.back();
+    
+  }
+}
+);
+
+const App: React.FC = (props:any) => { 
+  
+ 
+  return ( 
   <IonApp>
     <IonReactRouter> 
       <IonRouterOutlet>
-        <Route path="/" component={DataCapture} exact={true} />
+        <Route path="/home" component={DataCapture} exact={true} />
         <Route exact path="/npl" render={(props) => <Home {...props} /> } />
+        <Route path="/" component={DataCapture} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
 );
-
+}
 export default App;

@@ -1,56 +1,181 @@
- 
-   #cell6, #cell10 {
-    border-top : 0px;
-    border-bottom: 0px;
-  }
-
-  .chakra-table   {
-    width: 100%;
-    max-width: 500px; 
-    min-width: 300px;
-    margin: auto;
-    margin-top: 20px;
-    font-size: small;
-   }
-
-   .planet-table   {
-    width: 100%;
-    max-width: 500px; 
-    min-width: 300px;
-    margin: auto;
-    margin-top: 20px;
-    font-size: small;
-    text-align: left;
-   }
-
-   .npl-table   {
-    width: 100%;
-    max-width: 500px; 
-    min-width: 300px;
-    margin: auto;
-    margin-top: 20px;
-    font-size: small;
-    text-align: left;
-   }
-
-.main_label {
-  white-space: pre-wrap
+#cell6,
+#cell10 {
+  border-top: 0px;
+  border-bottom: 0px;
 }
 
-.btn{
-  margin-top: 20px;;
+.chakra-table {
+  width: 100%;
+  max-width: 500px;
+  min-width: 300px;
+  margin: auto;
+  margin-top: 20px;
+  font-size: small;
 }
 
- .chakra-table td {
-    border : 2px solid black;
-    min-width: 60px;
-    width: 25%;
-    height: 100px;
-    padding: 20px;
-    text-align: center;
-  }
+.planet-table {
+  width: 100%;
+  max-width: 500px;
+  min-width: 300px;
+  margin: auto;
+  margin-top: 10px;
+  font-size: small;
+  text-align: left;
+}
+
+.npl-table {
+  width: 100%;
+  max-width: 500px;
+  min-width: 300px;
+  margin: auto;
+  margin-top: 20px;
+  font-size: small;
+  text-align: left;
+}
+
+.main_label1 {
+  white-space: pre-wrap;
+  vertical-align: bottom;
+  font-size: medium;
+  font-weight: bold;
+}
+.main_label2 {
+  white-space: pre-wrap;
+  vertical-align: top;
+  font-size: medium;
+  font-weight: bold;
+}
+
+#cell6 {
+  vertical-align: bottom;
+  padding: 0;
+}
+#cell10 {
+  vertical-align: top;
+  padding: 0;
+}
+
+.img-span {
+  display: block;
+}
+
+.img-moon {
+  height: 40% !important;
+  width: 40% !important;
+}
+
+.btn {
+  margin-top: 10px;
+}
+
+.chakra-table td {
+  border: 2px solid orange;
+  min-width: 60px;
+  width: 25%;
+  height: 100px;
+  padding-top: 20x;
+
+  vertical-align: middle;
+  /* white-space: pre-wrap; */
+}
  
-  .ios .about-info {
-    text-align: center;
-  }  
+.planet-table td {
+  padding-bottom: 5px;
+  padding-left: 15px;
+  font-weight: bold;
+}
+
+.ios .about-info {
+  text-align: center;
+}
+
+.Mo {
+  color: black;
+  text-align: center;
+}
+
+.MoStar {
+  color: black;
+  text-align: center;
+}
+.Ke,
+.Ma {
+  color: red;
+  text-align: center;
+}
+
+.NPL {
+  font-weight: bold;
+  text-align: center;
+}
+
+.Me {
+  color: darkgreen;
+  text-align: center;
+}
+.Ju {
+  color: darkgoldenrod;
+  text-align: center;
+}
+
+.Ve {
+  color: palevioletred;
+
+  text-align: center;
+}
+
+.Ra,
+.Sa {
+  color: darkblue;
+  text-align: center;
+}
+
+.Su {
+  color: darkorange;
+  text-align: center;
+}
+
+
+.Mo1 {
+  color: black;
  
+}
+
+.MoStar1 {
+  color: black;  
+}
+.Ke1,
+.Ma1 {
+  color: red;
+ 
+}
+
+.NPL1 {
+  font-weight: bold;
+ 
+}
+
+.Me1 {
+  color: darkgreen;
+ 
+}
+.Ju1 {
+  color: darkgoldenrod;
+ 
+}
+
+.Ve1 {
+  color: palevioletred;
+ 
+}
+
+.Ra1,
+.Sa1 {
+  color: darkblue;
+ 
+}
+
+.Su1 {
+  color: darkorange;
+ 
+}

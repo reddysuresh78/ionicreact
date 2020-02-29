@@ -2,14 +2,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import  Chakra   from './Chakra'
 import  Observations   from './Observations'
-import { grid,  document, thumbsUp, calendar } from 'ionicons/icons';
+import NPLRules from './NPLRules'
+import { grid,  document, thumbsUp } from 'ionicons/icons';
 import { IonContent, IonPage, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonIcon, IonSlides, IonSlide, IonText, IonLabel, IonItem } from '@ionic/react';
-
-import ListDemo from './ListDemo';
+ 
  
 import './Home.css';
-import axios  from 'axios';
-
+ 
 import { Plugins } from '@capacitor/core';
 import { RouteComponentProps } from 'react-router';
 
@@ -51,8 +50,6 @@ const Home: React.FC<RouteComponentProps<{}>> = (props:any) => {
     speed: 10
   };
   
-  console.log('Received Props ', props.location.state['nativeName']);
-  
   return (
     <IonPage id="raasi-chakra-page">
       <IonHeader>
@@ -78,10 +75,7 @@ const Home: React.FC<RouteComponentProps<{}>> = (props:any) => {
               <IonIcon icon={thumbsUp} />
               <IonLabel>NPL Rules</IonLabel>
             </IonSegmentButton>
-            <IonSegmentButton value="3">
-              <IonIcon icon={calendar} />
-              <IonLabel>NPL Today</IonLabel>
-            </IonSegmentButton>
+           
           
           </IonSegment>
         </IonToolbar>
@@ -98,20 +92,10 @@ const Home: React.FC<RouteComponentProps<{}>> = (props:any) => {
              <Observations  {...props}/>
           </IonSlide>
           <IonSlide className="slide">
-           <IonItem>
-            <IonText>Longitude: { locData.longitude} </IonText>
-            </IonItem>
-            <IonItem>
-            <IonText>  Latitude: { locData.latitude} </IonText>
-            </IonItem>
+            <NPLRules />
+         
           </IonSlide>  
-       
-          <IonSlide className="slide">
-            <ListDemo />
-            
-          </IonSlide>  
-            
-
+         
         </IonSlides>
       </IonContent>
     </IonPage>
