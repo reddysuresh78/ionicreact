@@ -3,9 +3,7 @@ import React from 'react';
 import { IonContent } from '@ionic/react';
 import './Observations.css';
 import { RouteComponentProps } from 'react-router';
-
 import { useEffect, useState } from 'react';
-
 
 const Observations: React.FC<RouteComponentProps<{}>> = (props: any) => {
 
@@ -17,8 +15,8 @@ const Observations: React.FC<RouteComponentProps<{}>> = (props: any) => {
   });
 
   useEffect(() => {
-
     populateNPLInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let populateNPLInfo = () => {
@@ -26,7 +24,6 @@ const Observations: React.FC<RouteComponentProps<{}>> = (props: any) => {
     let newNPLInfo = { ...nplInfo };
     let serverInfo = props.location.state;
 
-    console.log('DRM ', serverInfo.nplDetails.drm);
     newNPLInfo = { ...newNPLInfo, DRM: camelCase(serverInfo.nplDetails.drm) };
     newNPLInfo = { ...newNPLInfo, HRM: camelCase(serverInfo.nplDetails.hrm) + '(' + serverInfo.nplDetails.hrmPada + ')' };
     newNPLInfo = { ...newNPLInfo, HRM_LORD: camelCaseShortPlanet(serverInfo.nplDetails.hrmLord) };
@@ -44,8 +41,6 @@ const Observations: React.FC<RouteComponentProps<{}>> = (props: any) => {
     newNPLInfo = { ...newNPLInfo, KETU_REPS: camelCaseList(serverInfo.ketuRepresentations) };//
     newNPLInfo = { ...newNPLInfo, SUNRISE: serverInfo.sunrise };//
     newNPLInfo = { ...newNPLInfo, ASSOCIATED_PLANETS: camelCaseList(serverInfo.associatedPlanets) };//
-
-
     setNPLInfo(newNPLInfo);
   }
 
@@ -69,7 +64,7 @@ const Observations: React.FC<RouteComponentProps<{}>> = (props: any) => {
   };
 
 
-  console.log('Observations called with props ', props.location.state['nativeName']);
+  // console.log('Observations called with props ', props.location.state['nativeName']);
   return (
 
     <IonContent>
@@ -108,7 +103,6 @@ const Observations: React.FC<RouteComponentProps<{}>> = (props: any) => {
           </tr>
 
           <tr>
-
             <td>YK Planets</td>
             <td>{nplInfo.YK_PLANETS}</td>
           </tr>
@@ -122,7 +116,6 @@ const Observations: React.FC<RouteComponentProps<{}>> = (props: any) => {
           </tr>
 
           <tr>
-
             <td>Digbala Planets</td>
             <td>{nplInfo.DIGBALA_PLANETS}</td>
           </tr>
@@ -147,15 +140,12 @@ const Observations: React.FC<RouteComponentProps<{}>> = (props: any) => {
           <tr>
             <td>Ketu Reps</td>
             <td>{nplInfo.KETU_REPS}</td>
-
           </tr>
-
-
-        </tbody>
+ 
+         </tbody>
       </table>
 
     </IonContent>
-
   );
 };
 

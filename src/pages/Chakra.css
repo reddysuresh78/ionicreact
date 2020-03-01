@@ -5,7 +5,7 @@
 }
 
 .chakra-table {
-  width: 100%;
+  width: 99%;
   max-width: 500px;
   min-width: 300px;
   margin: auto;
@@ -14,7 +14,7 @@
 }
 
 .planet-table {
-  width: 100%;
+  width: 99%;
   max-width: 500px;
   min-width: 300px;
   margin: auto;
@@ -69,19 +69,18 @@
 }
 
 .chakra-table td {
-  border: 2px solid orange;
+  border: 3px inset darkgreen;
   min-width: 60px;
   width: 25%;
   height: 100px;
   padding-top: 20x;
-
   vertical-align: middle;
   /* white-space: pre-wrap; */
 }
- 
+
 .planet-table td {
   padding-bottom: 5px;
-  padding-left: 15px;
+  padding-left: 5px;
   font-weight: bold;
 }
 
@@ -89,93 +88,83 @@
   text-align: center;
 }
 
-.Mo {
-  color: black;
+.Mo, .MoStar, .Ke,
+.Ma, .NPL, .Me, .Ju,
+.Ve,  .Ra,
+.Sa, .Su {
   text-align: center;
+  font-weight: bold;
+}
+
+
+.Mo {
+  color: darkmagenta;
 }
 
 .MoStar {
   color: black;
-  text-align: center;
 }
 .Ke,
 .Ma {
   color: red;
-  text-align: center;
 }
 
 .NPL {
   font-weight: bold;
-  text-align: center;
 }
 
 .Me {
   color: darkgreen;
-  text-align: center;
 }
 .Ju {
   color: darkgoldenrod;
-  text-align: center;
 }
 
 .Ve {
   color: palevioletred;
-
-  text-align: center;
 }
 
 .Ra,
 .Sa {
   color: darkblue;
-  text-align: center;
 }
 
 .Su {
   color: darkorange;
-  text-align: center;
 }
 
-
 .Mo1 {
-  color: black;
- 
+  color: darkmagenta;
 }
 
 .MoStar1 {
-  color: black;  
+  color: darkmagenta;
 }
 .Ke1,
 .Ma1 {
   color: red;
- 
 }
 
 .NPL1 {
   font-weight: bold;
- 
 }
 
 .Me1 {
   color: darkgreen;
- 
 }
 .Ju1 {
   color: darkgoldenrod;
- 
 }
 
 .Ve1 {
   color: palevioletred;
- 
 }
 
 .Ra1,
 .Sa1 {
   color: darkblue;
- 
 }
 
 .Su1 {
   color: darkorange;
- 
 }

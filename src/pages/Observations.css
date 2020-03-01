@@ -1,54 +1,31 @@
+#cell6,
+#cell10 {
+  border-top: 0px;
+  border-bottom: 0px;
+}
  
-   #cell6, #cell10 {
-    border-top : 0px;
-    border-bottom: 0px;
-  }
-
-  .chakra-table   {
-    width: 100%;
-    max-width: 500px; 
-    min-width: 300px;
-    margin: auto;
-    margin-top: 20px;
-    font-size: small;
-   }
-
-   .planet-table   {
-    width: 100%;
-    max-width: 500px; 
-    min-width: 300px;
-    margin: auto;
-    margin-top: 20px;
-    font-size: small;
-    text-align: left;
-    padding-bottom: 10px;
-   }
-
-   .npl-table   {
-    width: 100%;
-    max-width: 500px; 
-    min-width: 300px;
-    margin: auto;
-    margin-top: 20px;
-    font-size: medium;
-    text-align: left;
-   }
-
-.main_label {
-  white-space: pre-wrap
+.npl-table {
+  width: 98%;
+  max-width: 500px;
+  min-width: 300px;
+  margin: auto;
+  margin-top: 20px;
+  font-size: medium;
+  text-align: left;
 }
 
- .npl-table  td {
-    border : 2px solid orange;
-    min-width: 30px;
- 
- 
-    padding: 5px;
-    text-align: left;
-    justify-content: flex-end;
-  }
- 
-  .ios .about-info {
-    text-align: center;
-  }  
- 
+.main_label {
+  white-space: pre-wrap;
+}
+
+.npl-table td {
+  border: 3px inset darkgreen;
+  min-width: 30px;
+  padding: 5px;
+  text-align: left;
+  justify-content: flex-end;
+}
+
+.ios .about-info {
+  text-align: center;
+}

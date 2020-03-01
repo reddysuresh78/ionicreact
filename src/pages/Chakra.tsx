@@ -6,15 +6,12 @@ import './Chakra.css';
 import pdfmake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { RouteComponentProps } from 'react-router';
-
 import { useEffect, useState } from 'react';
-
 
 const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
 
   const [chartDetails1, setChartDetails1] = useState("NPL CHART");
   const [chartDetails2, setChartDetails2] = useState("");
-
 
   let initialChakraInfo: { [key: string]: string; } = {
     MESHAM: "", VRISHABHAM: "", MIDHUNAM: "", KARKATAKAM: "",
@@ -37,24 +34,17 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
     RAHU_REPS: "", KETU_REPS: ""
   });
 
-
-
   let generatePDF = () => {
     console.log('Generate pdf called');
-
     const { Filesystem } = Plugins;
-
     if (Capacitor.isNative) {
-
       // Save the PDF to the device
       const fileName = 'file.pdf';
       try {
-
         pdfmake.vfs = pdfFonts.pdfMake.vfs;
         console.log('Create pdf called');
         const doc = pdfmake.createPdf({ content: 'Hi. I am a PDF.' });
         doc.getBase64((base64data) => {
-
           Filesystem.writeFile({
             path: fileName,
             data: base64data,
@@ -68,9 +58,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
               console.log("Cache " + FilesystemDirectory.External);
               const path = getUriResult.uri;
               console.log("File found @ " + path);
-
               Plugins.CapFileOpener.open({ filePath: path.substr(7), fileMediaType: 'application/pdf' });
-
             }, (error) => {
               console.error('Error while opening pdf', error);
             });
@@ -85,7 +73,6 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
       // Save the PDF to the device
 
       pdfmake.vfs = pdfFonts.pdfMake.vfs;
-
       pdfmake.createPdf({ content: 'Hi. I am a PDF.' }).open();
       // On a browser simply use download
       // this.pdfObj.download();
@@ -94,10 +81,10 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
 
   useEffect(() => {
     populateChartInfo();
-
     populateChakraInfo();
     populatePlanetStarInfo();
     populateNPLInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let deg_to_dms = (deg: number) => {
@@ -124,19 +111,15 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
     console.log('Response from server: ', serverInfo.nplDetails);
     let placeInfo: string[] = serverInfo.placeOfBirth.split("La:");
     let finalStr1 = 'NPL CHART \n' + serverInfo.birthDetails + "\n" + placeInfo[0].replace('(', '\n').replace(',', ' ').replace(')', '');
-
     let finalStr2 = "La:" + placeInfo[1].replace(',Lo:', '\nLo:').replace(')', '');;
     setChartDetails1(finalStr1);
     setChartDetails2(finalStr2);
   }
-
-
   let populateNPLInfo = () => {
 
     let newNPLInfo = { ...nplInfo };
     let serverInfo = props.location.state;
-
-    console.log('DRM ', serverInfo.nplDetails.drm);
+ 
     newNPLInfo = { ...newNPLInfo, DRM: camelCase(serverInfo.nplDetails.drm) };
     newNPLInfo = { ...newNPLInfo, HRM: camelCase(serverInfo.nplDetails.hrm) + '(' + serverInfo.nplDetails.hrmPada + ')' };
     newNPLInfo = { ...newNPLInfo, HRM_LORD: camelCase(serverInfo.nplDetails.hrmLord) };
@@ -182,9 +165,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
 
     return retValue;
   };
-
-
-
+ 
   let camelCase = (planet: string) => {
     return planet.substr(0, 1) + planet.substr(1).toLowerCase();
   };
@@ -192,8 +173,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
   let camelCaseShortPlanet = (planet: string) => {
     return planet.substr(0, 1) + planet.substr(1, 1).toLowerCase();
   };
-
-
+ 
   let populateChakraInfo = () => {
 
     let newChakraInfo = { ...chakraInfo };
@@ -248,7 +228,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
 
   }
 
-  console.log('Chakra called with props ', props.location.state['nativeName']);
+  // console.log('Chakra called with props ', props.location.state['nativeName']);
   return (
 
     <IonContent>
@@ -259,22 +239,16 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
             <td> <IonText> <span dangerouslySetInnerHTML={{ __html: chakraInfo.MESHAM }} />    </IonText></td>
             <td><IonText> <span dangerouslySetInnerHTML={{ __html: chakraInfo.VRISHABHAM }} />    </IonText></td>
             <td> <IonText> <span dangerouslySetInnerHTML={{ __html: chakraInfo.MIDHUNAM }} />    </IonText> </td>
-
           </tr>
           <tr>
-
             <td><IonText> <span dangerouslySetInnerHTML={{ __html: chakraInfo.KUMBHAM }} />    </IonText></td>
             <td id="cell6" colSpan={2}> <IonText> <span className="main_label1" dangerouslySetInnerHTML={{ __html: chartDetails1 }} />    </IonText></td>
             <td><IonText> <span dangerouslySetInnerHTML={{ __html: chakraInfo.KARKATAKAM }} />    </IonText> </td>
-
           </tr>
           <tr>
             <td><IonText> <span dangerouslySetInnerHTML={{ __html: chakraInfo.MAKARAM }} /> </IonText>  </td>
-
             <td id="cell10" colSpan={2}> <IonText> <span className="main_label2" dangerouslySetInnerHTML={{ __html: chartDetails2 }} />    </IonText></td>
-
             <td><IonText> <span dangerouslySetInnerHTML={{ __html: chakraInfo.SIMHAM }} /></IonText>  </td>
-
           </tr>
           <tr>
             <td><IonText> <span dangerouslySetInnerHTML={{ __html: chakraInfo.DHANUS }} />  </IonText> </td>
@@ -288,16 +262,13 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
       <table className="planet-table">
         <tbody>
           <tr>
-
             <td className="DRM">DRM</td>
             <td className="DRM">{nplInfo.DRM}</td>
             <td className="HRM">HRM</td>
             <td className="HRM">{nplInfo.HRM}</td>
             <td> </td>
             <td> </td>
-
           </tr>
-
           <tr>
             <td className="Su1">Su</td>
             <td className="Su1">{planetStarInfo.SUN}</td>
@@ -305,10 +276,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
             <td ><span className="MoStar1">{planetStarInfo.MOON}</span></td>
             <td className="Ma1">Ma</td>
             <td className="Ma1">{planetStarInfo.MARS}</td>
-
           </tr>
-
-
           <tr>
             <td className="Me1">Me</td>
             <td className="Me1">{planetStarInfo.MERCURY}</td>
@@ -316,9 +284,7 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
             <td className="Ju1">{planetStarInfo.JUPITER}</td>
             <td className="Ve1">Ve</td>
             <td className="Ve1">{planetStarInfo.VENUS}</td>
-
           </tr>
-
           <tr>
             <td className="Sa1">Sa</td>
             <td className="Sa1">{planetStarInfo.SATURN}</td>
@@ -326,22 +292,13 @@ const Chakra: React.FC<RouteComponentProps<{}>> = (props: any) => {
             <td className="Ra1">{planetStarInfo.RAHU}</td>
             <td className="Ke1">Ke</td>
             <td className="Ke1">{planetStarInfo.KETU}</td>
-
           </tr>
-
         </tbody>
       </table>
-
-
-
       <div>
         <IonButton onClick={generatePDF} class="btn">Export PDF</IonButton>
-
       </div>
     </IonContent>
-
   );
 };
-
-
 export default React.memo(Chakra);

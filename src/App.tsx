@@ -3,7 +3,7 @@ import {  Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
  
-import Home from './pages/Home';
+import NPLHome from './pages/NPLHome';
  
 
 /* Core CSS required for Ionic components to work properly */
@@ -27,33 +27,36 @@ import './theme/variables.css';
 import DataCapture from './pages/DataCapture';
  
 import { Plugins } from '@capacitor/core'
-
+  
 const { SplashScreen } = Plugins;
 SplashScreen.hide();
 
 Plugins.App.addListener('backButton', (data: any) => {
-  console.log('back called with ', window.location.pathname);
-  console.log('back called with ', JSON.stringify(  data));
+  console.log('back called with path ', window.location.pathname);
+  console.log('back called with data ', JSON.stringify(  data));
+  console.log('History: ', JSON.stringify(  window.history));
   if (window.location.pathname === "/") {
     Plugins.App.exitApp();
   } else {
     console.log('History: ', JSON.stringify(  window.history));
-    window.history.back();
+    // window.history.back();
+    
     
   }
 }
 );
 
-const App: React.FC = (props:any) => { 
+const App: React.FC = () => { 
   
  
   return ( 
   <IonApp>
     <IonReactRouter> 
       <IonRouterOutlet>
-        <Route path="/home" component={DataCapture} exact={true} />
-        <Route exact path="/npl" render={(props) => <Home {...props} /> } />
-        <Route path="/" component={DataCapture} />
+ 
+        <Route  path="/nplhome" render={(props) => <NPLHome {...props} />  }  exact={true} />
+        <Route  path="/" component={DataCapture}  exact={true} />
+         
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

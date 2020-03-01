@@ -1,43 +1,37 @@
 .label-align {
-    text-align: right;
-    padding-right: 10px;
-    margin-top:10px;
-    font-weight: bold;
-    font-size: medium;
+  text-align: right;
+  padding-right: 10px;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: medium;
 }
 
-.input-align{
-     margin-left: 5px;
+.input-align {
+  margin-left: 5px;
 }
 
-.day-button-align{
-    text-align: center;
-    /* margin-left: 120px; */
-    /* padding-left: 20px; */
-    margin: auto;
-   
+.day-button-align {
+  text-align: center;
+  /* margin-left: 120px; */
+  /* padding-left: 20px; */
+  margin: auto;
 }
 
-.data-card{
-    
-    width: 95%;
-    margin: auto;
+.data-card {
+  margin-top: 30px;
+  width: 95%;
+  margin: auto;
 }
 
-.button-align{
-    margin-top:10px;
-    margin-left: 5px;
+.button-align {
+  margin-top: 10px;
+  margin-left: 5px;
 }
 
-.custom-spinner{
-  
-        width: 100px;
-        height: 100px;
-        color: #3880ff;
-        display: block;
-        margin: auto;
-     
-     
-   
+.custom-spinner {
+  width: 100px;
+  height: 100px;
+  color: #3880ff;
+  display: block;
+  margin: auto;
 }
- 
